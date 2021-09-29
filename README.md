@@ -12,7 +12,7 @@ The FathomNet terms of use extends to the FathomNet Model Zoo unless otherwise i
 ### Object Detection <a name="object_detection"/>
 Object detection models identify and locate objects within an image or video.
 
-|Model Name |Model Class |Habitat |Training Details |Description |
+|Model Name |Model Class |Habitat |Description |
 |-|-|-|-|
 |<b>[MBARI Monterey Bay](https://doi.org/10.5281/zenodo.5539915)</b>|<b>[yolov5](https://github.com/ultralytics/yolov5)</b>|Benthic|This model was trained on 691 classes using 33,667 localized images from MBARI’s Video Annotation and Reference System (VARS). Note: only a subset of the VARS database is uploaded to FathomNet because of institutional concept embargos. For training, images were split 80/20 train/test. Classes were selected because they are commonly observed concepts (primarily benthic organisms, along with equipment and marine litter or trash) within the Monterey Bay and Submarine Canyon system from 500 to 4000 m deep. Many of these organisms will be seen throughout the entire NE Pacific within the continental slope, shelf, and abyssal regions. We used the PyTorch framework and the yolov5 ‘YOLOv5x’ pretrained checkpoint to train for 28 epochs with a batch size of 18 and image size of 640 pixels. <b>[DOI: 10.5281/zenodo.5539915](https://doi.org/10.5281/zenodo.5539915)</b>|
 <hr>
