@@ -145,16 +145,21 @@ def run_inference(test_image):
                          model_inst.cat(insts).scores,
                          NMS_THRESH).to("cpu").tolist()]
 
+
     print(test_image + ' - Number of predictions:', len(xx))
     out_inf_raw = v_inf.draw_instance_predictions(xx.to("cpu"))
-    os.makedirs("predictions", exist_ok=True)
 
-    if True:
-        plt.figure()
+    if False:
+
+        os.makedirs("predictions", exist_ok=True)
+
+        plt.figure(figsize=(20,10))
         plt.title("Predictions: " + str(len(xx)) + "    Image: " + test_image)
+        plt.subplot(1, 2, 1)
+        plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        plt.subplot(1, 2, 2)
         plt.imshow(out_inf_raw.get_image())
         plt.savefig("predictions/" + os.path.basename(test_image))
-
 
     # Converting the predictions as output by Detectron2, to a TATOR format.
     predictions = convert_predictions(xx, v_inf.metadata.thing_classes)
@@ -170,14 +175,18 @@ def convert_predictions(xx, thing_classes):
 
     for _ in range(len(xx)):
 
+        # Obtain the first prediction, instance
         instance = xx.__getitem__(_)
 
-        x, y, x2, y2 = instance.pred_boxes.tensor
+        # Map the coordinates to the variables
+        x, y, x2, y2 = map(float, instance.pred_boxes.tensor[0])
         w, h = x2 - x, y2 - y
 
+        # Use class list to get the common name (string); get confidence score.
         class_category = thing_classes[int(instance.pred_classes[0])]
         confidence_score = float(instance.scores[0])
 
+        # Create a spec dict for TATOR
         prediction = {'x': x,
                       'y': y,
                       'width': w,
@@ -199,4 +208,5 @@ if __name__ == "__main__":
     for test_image in test_images:
         predictions = run_inference(test_image)
 
+    print("Done.")
 
