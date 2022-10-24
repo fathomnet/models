@@ -13,9 +13,6 @@ import inference
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-# Magic number from TATOR docs; could be exposed as a parameter
-FRAMES = 30
-
 # Read environment variables that are provided from TATOR
 host = os.getenv('HOST')
 token = os.getenv('TOKEN')
@@ -55,25 +52,36 @@ for media_id in media_ids:
 
         # For every N frames, make a prediction; append prediction results
         # to a list, increase the frame count.
-        #
-        # TODO, change this to work with FathomNet 2 Model
         if frame_number % frames_per_inference == 0:
-            coverage_list, top_pred = inference.run_inference(framefile)
-            spec = {"Percentage Sand_NC Coverage": coverage_list[0],
-                    "Percentage Sp Coverage": coverage_list[1],
-                    "Percentage Rhod Coverage": coverage_list[2],
-                    "Percentage LS_Crl Coverage": coverage_list[3],
-                    "Percentage LH_Crl Coverage": coverage_list[4],
-                    "Scene Classification": top_pred}
-            localizations.append(spec)
+
+            # Predictions contains a list; each index contains a dict (spec)
+            # specifying the following:
+            # x - left-most
+            # y - right-most
+            # width - width of bbox (x2 - x)
+            # height - height of bbox (y2 - y)
+            # class_category - string of top prediction
+            # confidence - float of confidence scores [0-1]
+            # Below the additional information is added (refer to TATOR docs)
+
+            predictions = inference.run_inference(framefile)
+
+            for prediction in predictions:
+
+                prediction['media_id'] = media_id
+                prediction['type'] = None # Unsure, docs not specific
+                prediction['frame'] = frame_number
+
+                localizations.append(prediction)
+
         frame_number += 1
 
     # End interaction with video properly.
     vid.release()
 
-    # Create the localizations in the video.
-    # TODO This is where conversations with CVision are likely going to be had.
     logger.info(f"Uploading object detections on {media.name}...")
+
+    # Create the localizations in the video.
     num_created = 0
     for response in tator.util.chunked_create(api.create_localization_list,
                                               project_id,

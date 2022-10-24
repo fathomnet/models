@@ -1,7 +1,9 @@
+import os
+import glob
+
+import numpy as np
 import detectron2
 import torchvision
-import pickle
-import json
 import cv2
 import torch
 
@@ -15,8 +17,7 @@ from detectron2.modeling import build_model
 import detectron2.data.transforms as T
 from detectron2.checkpoint import DetectionCheckpointer
 
-from PIL import Image
-
+import matplotlib.pyplot as plt
 
 # -----------------------------------------------------------------------------
 # CONFIGS - loaded just the one time when script is first ran to save time.
@@ -66,6 +67,7 @@ fathomnet_metadata = Metadata(
 base_model_path = "COCO-Detection/retinanet_R_50_FPN_3x.yaml"
 
 cfg = get_cfg()
+cfg.MODEL.DEVICE = 'cpu'
 cfg.merge_from_file(model_zoo.get_config_file(base_model_path))
 cfg.merge_from_file(CONFIG_FILE)
 cfg.MODEL.RETINANET.SCORE_THRESH_TEST = SCORE_THRESH
@@ -143,6 +145,58 @@ def run_inference(test_image):
                          model_inst.cat(insts).scores,
                          NMS_THRESH).to("cpu").tolist()]
 
-    print('Number of predictions:', len(xx))
+    print(test_image + ' - Number of predictions:', len(xx))
     out_inf_raw = v_inf.draw_instance_predictions(xx.to("cpu"))
-    im_pil_inf_raw = Image.fromarray(out_inf_raw.get_image())
+    os.makedirs("predictions", exist_ok=True)
+
+    if True:
+        plt.figure()
+        plt.title("Predictions: " + str(len(xx)) + "    Image: " + test_image)
+        plt.imshow(out_inf_raw.get_image())
+        plt.savefig("predictions/" + os.path.basename(test_image))
+
+
+    # Converting the predictions as output by Detectron2, to a TATOR format.
+    predictions = convert_predictions(xx, v_inf.metadata.thing_classes)
+
+    return predictions
+
+
+def convert_predictions(xx, thing_classes):
+    """Helper funtion to post-process the predictions made by Detectron2
+    codebase to work with TATOR input requirements."""
+
+    predictions = []
+
+    for _ in range(len(xx)):
+
+        instance = xx.__getitem__(_)
+
+        x, y, x2, y2 = instance.pred_boxes.tensor
+        w, h = x2 - x, y2 - y
+
+        class_category = thing_classes[int(instance.pred_classes[0])]
+        confidence_score = float(instance.scores[0])
+
+        prediction = {'x': x,
+                      'y': y,
+                      'width': w,
+                      'height': h,
+                      'class_category': class_category,
+                      'confidence': confidence_score}
+
+        predictions.append(prediction)
+
+    return predictions
+
+
+if __name__ == "__main__":
+
+    # For demo purposes: run through a couple of test
+    # images and then output the predictions in a folder.
+    test_images = glob.glob("images/*.png")
+
+    for test_image in test_images:
+        predictions = run_inference(test_image)
+
+
