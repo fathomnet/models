@@ -22,23 +22,37 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+
 def get_session():
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     return tf.Session(config=config)
 
+
 def parse_args():
-    parser = argparse.ArgumentParser(description='Simple inference script for object detection.')
+    parser = argparse.ArgumentParser(
+        description='Simple inference script for object detection.')
     parser.add_argument('model', help='Path to RetinaNet model.')
-    parser.add_argument('test_path', help='Path to file containing list of inference images')
-    parser.add_argument('class_file', help='Name of the class file to evaluate')
-    parser.add_argument('--gpu', help='Id of the GPU to use (as reported by nvidia-smi).')
-    parser.add_argument('--score-threshold', help='Threshold on score to filter detections with (defaults to 0.05).', default=0.05, type=float)
-    parser.add_argument('--image_min_side', help='Minimum image side to rescale input to', default=1100, type=int)
-    parser.add_argument('--image_max_side', help='Maximum image side to rescale input to', default=1650, type=int)
-    parser.add_argument('--num_channels', type=int, default=3, help='Number of channels in input images')
+    parser.add_argument('test_path',
+                        help='Path to file containing list of inference images')
+    parser.add_argument('class_file',
+                        help='Name of the class file to evaluate')
+    parser.add_argument('--gpu',
+                        help='Id of the GPU to use (as reported by nvidia-smi).')
+    parser.add_argument('--score-threshold',
+                        help='Threshold on score to filter detections with (defaults to 0.05).',
+                        default=0.05, type=float)
+    parser.add_argument('--image_min_side',
+                        help='Minimum image side to rescale input to',
+                        default=1100, type=int)
+    parser.add_argument('--image_max_side',
+                        help='Maximum image side to rescale input to',
+                        default=1650, type=int)
+    parser.add_argument('--num_channels', type=int, default=3,
+                        help='Number of channels in input images')
 
     return parser.parse_args()
+
 
 if __name__ == '__main__':
     # parse arguments
@@ -77,7 +91,8 @@ if __name__ == '__main__':
         image, scale = test_generator.resize_image(image)
 
         # run network
-        _, _, detections = model.predict_on_batch(np.expand_dims(image, axis=0))
+        _, _, detections = model.predict_on_batch(
+            np.expand_dims(image, axis=0))
 
         # clip to image shape
         detections[:, :, 0] = np.maximum(0, detections[:, :, 0])
@@ -98,11 +113,11 @@ if __name__ == '__main__':
             # append detections for each positively labeled class
             if float(detection[5 + label]) > args.score_threshold:
                 image_result = {
-                    'image_id'    : test_generator.image_names[i],
-                    'category_id' : test_generator.label_to_name(label),
-                    'scores'      : [float(det) for i,det in 
-                                     enumerate(detection) if i >= 5],
-                    'bbox'        : (detection[:4]).tolist(),
+                    'image_id': test_generator.image_names[i],
+                    'category_id': test_generator.label_to_name(label),
+                    'scores': [float(det) for i, det in
+                               enumerate(detection) if i >= 5],
+                    'bbox': (detection[:4]).tolist(),
                 }
                 # append detection to results
                 results.append(image_result)
@@ -111,5 +126,7 @@ if __name__ == '__main__':
 
         # print progress
         logger.info('{}/{}'.format(i, len(test_generator.image_names)))
-    out_name = '{}_predict_results_{}.pickle'.format(os.path.splitext(args.test_path)[0],str(args.score_threshold).split(".")[-1])
-    pickle.dump(results,open(out_name,'wb'))
+    out_name = '{}_predict_results_{}.pickle'.format(
+        os.path.splitext(args.test_path)[0],
+        str(args.score_threshold).split(".")[-1])
+    pickle.dump(results, open(out_name, 'wb'))
