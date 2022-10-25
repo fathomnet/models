@@ -149,17 +149,11 @@ def run_inference(test_image):
     print(test_image + ' - Number of predictions:', len(xx))
     out_inf_raw = v_inf.draw_instance_predictions(xx.to("cpu"))
 
-    if False:
+    if True:
 
-        os.makedirs("predictions", exist_ok=True)
-
-        plt.figure(figsize=(20,10))
+        plt.figure()
         plt.title("Predictions: " + str(len(xx)) + "    Image: " + test_image)
-        plt.subplot(1, 2, 1)
-        plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-        plt.subplot(1, 2, 2)
         plt.imshow(out_inf_raw.get_image())
-        plt.savefig("predictions/" + os.path.basename(test_image))
 
     # Converting the predictions as output by Detectron2, to a TATOR format.
     predictions = convert_predictions(xx, v_inf.metadata.thing_classes)
