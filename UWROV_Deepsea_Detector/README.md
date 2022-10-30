@@ -11,7 +11,7 @@ Developed by Peyton Lee, Neha Nagvekar, and Cassandra Lam as part of the Underwa
 - Working [`inference`](inference.py) script and Notebooks ✅
 - Working [`Dockerfile`](Dockerfile) (for performing inference) ✅
 - `inference` script contains hooks to use with [TATOR](tator.io) ✅
-- - Working [HuggingSpace demo](https://huggingface.co/spaces/Jordan-Pierce/MBARI_Monterey_Bay_Benthic) (see below) ✅
+- Working [HuggingSpace demo](https://huggingface.co/spaces/Jordan-Pierce/UWROV_Deepsea_Detector) (see below) ✅
 
   
 #### HuggingFace Demo
@@ -21,7 +21,7 @@ up to demonstrate the capabilities of this particular model. Feel free to
 include your own test images, or use the examples provided (these were 
 selected randomly from [FathomNet](fathomnet.com)).
 
-[![homepage](Figures/HuggingSpace.PNG)](https://huggingface.co/spaces/Jordan-Pierce/MBARI_Monterey_Bay_Benthic)
+[![homepage](Figures/HuggingSpace.PNG)](https://huggingface.co/spaces/Jordan-Pierce/UWROV_Deepsea_Detector)
 
 
 ## Overview

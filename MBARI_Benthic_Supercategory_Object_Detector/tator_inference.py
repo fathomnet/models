@@ -18,7 +18,7 @@ host = os.getenv('HOST')
 token = os.getenv('TOKEN')
 project_id = int(os.getenv('PROJECT_ID'))
 media_ids = [int(id_) for id_ in os.getenv('MEDIA_IDS').split(',')]
-frames_per_inference = int(os.getenv('FRAMES_PER_INFERENCE', FRAMES))
+frames_per_inference = int(os.getenv('FRAMES_PER_INFERENCE', 30))
 
 # Set up the TATOR API.
 api = tator.get_api(host, token)
@@ -64,7 +64,7 @@ for media_id in media_ids:
             # confidence - float of confidence scores [0-1]
             # Below the additional information is added (refer to TATOR docs)
 
-            predictions = inference.run_inference(framefile)
+            predictions, out_img = inference.run_inference(framefile)
 
             for prediction in predictions:
 

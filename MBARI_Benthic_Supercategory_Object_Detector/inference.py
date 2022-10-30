@@ -134,7 +134,6 @@ def run_inference(test_image):
         for _ in range(len(model_outputs['instances'])):
             insts.append(model_outputs['instances'][_])
 
-    # TODO explore the outputs to determine what needs to be passed to tator_inference.py
     # Concatenate the model outputs and run NMS thresholding on all output;
     # instantiate a dummy Instance object to concatenate the instances
     model_inst = detectron2.structures.instances.Instances([im_height,
@@ -145,20 +144,14 @@ def run_inference(test_image):
                          model_inst.cat(insts).scores,
                          NMS_THRESH).to("cpu").tolist()]
 
-
     print(test_image + ' - Number of predictions:', len(xx))
     out_inf_raw = v_inf.draw_instance_predictions(xx.to("cpu"))
-
-    if True:
-
-        plt.figure()
-        plt.title("Predictions: " + str(len(xx)) + "    Image: " + test_image)
-        plt.imshow(out_inf_raw.get_image())
+    out_pil = Image.fromarray(out_inf_raw.get_image()).convert('RGB')
 
     # Converting the predictions as output by Detectron2, to a TATOR format.
     predictions = convert_predictions(xx, v_inf.metadata.thing_classes)
 
-    return predictions
+    return predictions, out_pil
 
 
 def convert_predictions(xx, thing_classes):
@@ -200,7 +193,7 @@ if __name__ == "__main__":
     test_images = glob.glob("images/*.png")
 
     for test_image in test_images:
-        predictions = run_inference(test_image)
+        predictions, out_img = run_inference(test_image)
 
     print("Done.")
 
