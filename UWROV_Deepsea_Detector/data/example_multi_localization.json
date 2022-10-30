@@ -1,0 +1,56 @@
+{
+    "id": 2342076,
+    "uuid": "0faf6a75-3e79-4162-8da0-e3965619ab06",
+    "url": "https://fathomnet.org/static/m3/framegrabs/Ventana/stills/2002/302/00_53_54_25.png",
+    "valid": true,
+    "imagingType": "ROV",
+    "depthMeters": 892.4000244140625,
+    "height": 366,
+    "lastValidation": "2022-05-01T09:40:11.811881900Z",
+    "latitude": 36.714627,
+    "longitude": -122.002515,
+    "salinity": 34.48500061035156,
+    "temperatureCelsius": 4.394999980926514,
+    "oxygenMlL": 0.3100000023841858,
+    "pressureDbar": 900.7999877929688,
+    "sha256": "27ae3e6e2ab6c7e774eb2135c7cfe56255a3c60837239bca3b5d038ee746672a",
+    "tags": [
+        {
+            "uuid": "4272e72c-7074-444d-8ed4-a49ed393f435",
+            "key": "source",
+            "mediaType": "text/plain",
+            "value": "MBARI/VARS"
+        }
+    ],
+    "timestamp": "2002-10-29T18:05:11Z",
+    "width": 640,
+    "boundingBoxes": [
+        {
+            "uuid": "725c50dc-c52c-4aaf-b2db-27b3613c6ecb",
+            "concept": "Poralia rufescens",
+            "height": 45,
+            "observer": "master@mbari.org",
+            "width": 120,
+            "x": 519,
+            "y": 1,
+            "rejected": false,
+            "verified": false,
+            "userDefinedKey": "d250acdc-9b28-497f-d360-7fb8d2c4aa1e"
+        },
+        {
+            "uuid": "da6c45a2-9aad-44b3-998d-d55904dd5fda",
+            "concept": "Crustacea",
+            "height": 11,
+            "observer": "master@mbari.org",
+            "width": 16,
+            "x": 109,
+            "y": 290,
+            "rejected": false,
+            "verified": false,
+            "userDefinedKey": "c3bc7ef3-a62b-4649-fd6a-84b712e8ba1e"
+        }
+    ],
+    "createdTimestamp": "2021-09-29T21:18:32.272Z",
+    "lastUpdatedTimestamp": "2022-05-01T09:40:11.821Z",
+    "contributorsEmail": "brian@mbari.org"
+}

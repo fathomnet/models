@@ -134,7 +134,7 @@ def run_inference(test_image):
         for _ in range(len(model_outputs['instances'])):
             insts.append(model_outputs['instances'][_])
 
-    # TODO explore the outputs to determine what needs to be passed to tator.py
+    # TODO explore the outputs to determine what needs to be passed to tator_inference.py
     # Concatenate the model outputs and run NMS thresholding on all output;
     # instantiate a dummy Instance object to concatenate the instances
     model_inst = detectron2.structures.instances.Instances([im_height,
