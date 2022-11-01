@@ -1,6 +1,14 @@
+try:
+    import detectron2
+except:
+    import os
+    os.system("pip install 'git+https://github.com/facebookresearch/detectron2.git'")
+
+
 from inference import *
 import gradio as gr
 import glob
+
 
 def gradio_app(image_path):
     """Helper function to run inference on provided image"""
@@ -27,7 +35,7 @@ description = "Gradio demo for MBARI Monterey Bay Benthic Supercategory: This " 
 
 examples = glob.glob("images/*.png")
 
-gr.Interface(run_inference,
+gr.Interface(gradio_app,
              inputs=[gr.inputs.Image(type="filepath")],
              outputs=gr.outputs.Image(type="pil"),
              enable_queue=True,

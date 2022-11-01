@@ -1,10 +1,15 @@
-FROM cvisionai/openem_lite:latest
+FROM cvisionai/retinanet:latest
 
-RUN apt update
-COPY retinanet-classify-image.py /scripts/retinanet-classify-image.py
-COPY production_model.h5 /scripts/production_model.h5
-COPY class_file.csv /scripts/class_file.csv
-COPY example_inference.csv /scripts/example_inference.csv
+RUN apt-get update
 
-WORKDIR /scripts
+# Not necessary, but used for the Gradio demo
+RUN apt-get install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update \
+    && apt-get -y install python3.7
 
+COPY . ./
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+CMD [ "python", "-u", "./tator_inference.py" ]

@@ -12,8 +12,7 @@ Takahashi. "Visual tracking of deepwater animals using machine learning-controll
 ![image](Figures/confusion_matrix.png)  
 
 #### Repository Status:
-- Working inference script ❌
-- Working Dockerfile (for performing inference) ❌
-- inference script contains hooks to use with TATOR ❌
+- Working [`inference`](inference.py) script and Notebooks ✅
+- Working [`Dockerfile`](Dockerfile) (for performing inference) ✅
+- `inference` script contains hooks to use with [TATOR](tator.io) ✅
 - Working HuggingSpace demo ❌
-

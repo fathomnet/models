@@ -6,4 +6,6 @@ scikit-image
 scikit-learn
 tator
 torch
+gradio
+Pillow
 
