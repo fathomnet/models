@@ -8,7 +8,6 @@ from keras_retinanet.models.resnet import custom_objects
 
 import cv2
 import numpy as np
-import tensorflow as tf
 from PIL import Image
 
 
@@ -107,20 +106,9 @@ def run_inference(image_path, threshold=0.125):
     return predictions, Image.fromarray(out_image)
 
 
-def get_session():
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    return tf.Session(config=config)
-
-
 # -----------------------------------------------------------------------------
 # Configs
 # -----------------------------------------------------------------------------
-
-# Setting CPU as the default processor
-device = 'cpu'
-os.environ['CUDA_VISIBLE_DEVICES'] = device
-keras.backend.tensorflow_backend.set_session(get_session())
 
 # Path to trained model
 model_path = 'production_model.h5'

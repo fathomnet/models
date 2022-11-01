@@ -1,3 +1,6 @@
+import os
+os.system("python setup.py install --user")
+
 import glob
 import gradio as gr
 from inference import *

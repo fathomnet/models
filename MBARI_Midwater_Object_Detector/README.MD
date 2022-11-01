@@ -9,10 +9,13 @@ Katija, Kakani, Paul LD Roberts, Joost Daniels, Alexandra Lapides, Kevin
 Barnard, Mike Risi, Ben Y. Ranaan, Benjamin G. Woodward, and Jonathan 
 Takahashi. "Visual tracking of deepwater animals using machine learning-controlled robotic underwater vehicles." In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision, pp. 860-869. 2021.  
 
-![image](Figures/confusion_matrix.png)  
+![image](Figures/confusion_matrix.png)
 
 #### Repository Status:
 - Working [`inference`](inference.py) script and Notebooks ✅
 - Working [`Dockerfile`](Dockerfile) (for performing inference) ✅
 - `inference` script contains hooks to use with [TATOR](tator.io) ✅
 - Working HuggingSpace demo ❌
+
+
+![image](Figures/output.png)
