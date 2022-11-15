@@ -13,11 +13,12 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Read environment variables that are provided from TATOR
-host = os.getenv('HOST')
-token = os.getenv('TOKEN')
-project_id = int(os.getenv('PROJECT_ID'))
-media_ids = [int(id_) for id_ in os.getenv('MEDIA_IDS').split(',')]
-frames_per_inference = int(os.getenv('FRAMES_PER_INFERENCE', 30))
+# Environmental variables are fed in via YAML file
+host = os.getenv('HOST') # URL https://cloud.tator.io/ (check slashes)
+token = os.getenv('TOKEN') # Obtain from TATOR
+project_id = int(os.getenv('PROJECT_ID')) # Project ID from URL of project (number after URL, 123 for example)
+media_ids = [int(id_) for id_ in os.getenv('MEDIA_IDS').split(',')] # These are the files, media info, right-hand side, ID field there
+frames_per_inference = int(os.getenv('FRAMES_PER_INFERENCE', 30)) # modify if needed 
 
 # Set up the TATOR API.
 api = tator.get_api(host, token)
@@ -52,23 +53,25 @@ for media_id in media_ids:
         # For every N frames, make a prediction; append prediction results
         # to a list, increase the frame count.
         if frame_number % frames_per_inference == 0:
-
+            
             # Predictions contains a list; each index contains a dict (spec)
             # specifying the following:
+            # TATOR expects normalized pixel coordinates, important for multiscale, normalize against the base
             # x - left-most
-            # y - right-most
+            # y - upper-most
             # width - width of bbox (x2 - x)
             # height - height of bbox (y2 - y)
-            # class_category - string of top prediction
+            # class_category - string of top prediction, change this to be species name
             # confidence - float of confidence scores [0-1]
+            # Any additional user-defined attributes
             # Below the additional information is added (refer to TATOR docs)
 
             predictions, out_img = inference.run_inference(framefile)
-
+           
             for prediction in predictions:
 
                 prediction['media_id'] = media_id
-                prediction['type'] = None # Unsure, docs not specific
+                prediction['type'] = None # Type ID, specifies localization, within TATOR
                 prediction['frame'] = frame_number
 
                 localizations.append(prediction)
